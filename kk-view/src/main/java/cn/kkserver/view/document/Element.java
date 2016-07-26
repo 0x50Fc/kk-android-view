@@ -494,7 +494,7 @@ public class Element extends EventDispatcher {
 
         if(p != null) {
 
-            ComputedStyle pStyle = (ComputedStyle) p.style();
+            ComputedStyle pStyle = p.style();
 
             for(Style v : pStyle.dependencies()) {
                 if(v instanceof StyleSheet) {
@@ -535,6 +535,10 @@ public class Element extends EventDispatcher {
     public String status() {
         String v = attr("status");
         if(v == null){
+            Element p = parentElement();
+            if(p != null) {
+                return p.status();
+            }
             return "";
         }
         return v;
@@ -542,9 +546,15 @@ public class Element extends EventDispatcher {
 
     public String stringValue(String key, String defaultValue) {
         String v = attr(key);
-        if(v == null) {
-            v = style().attrInStatus(key,status());
+        String status = this.status();
+
+        Element el = this;
+
+        while(v == null && el != null) {
+            v = el.style().attrInStatus(key,status);
+            el = el.parentElement();
         }
+
         if(v == null) {
             return defaultValue;
         }

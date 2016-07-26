@@ -2,7 +2,7 @@ package cn.kkserver.view.document;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-
+import cn.kkserver.view.style.ComputedStyle;
 import cn.kkserver.view.value.Color;
 import cn.kkserver.view.value.Edge;
 import cn.kkserver.view.value.Font;
@@ -28,6 +28,7 @@ public class TextElement extends CanvasElement {
 	public Color textColor(){
 		return colorValue("color", Color.blackColor);
 	}
+
 
 	@Override
 	protected void onDrawElement(Canvas canvas){

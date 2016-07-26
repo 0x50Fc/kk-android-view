@@ -1,6 +1,10 @@
 package cn.kkserver.view.style;
 
+import android.content.Context;
+
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.LinkedList;
 import java.util.List;
@@ -136,6 +140,19 @@ public class StyleSheet extends Style {
             sb.append(data,0,length);
         }
         loadCSS(sb.toString());
+    }
+
+    public void loadCSS(int id,Context context) throws IOException {
+
+        InputStream in = context.getResources().openRawResource(id);
+
+        try {
+            loadCSS(new InputStreamReader(in,"utf-8"));
+        }
+        finally {
+            in.close();
+        }
+
     }
 
     private boolean _hasEditting;
