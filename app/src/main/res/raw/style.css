@@ -1,0 +1,43 @@
+
+layout {
+    element:cn.kkserver.view.document.LayoutElement;
+}
+
+canvas {
+    element:cn.kkserver.view.document.CanvasElement;
+}
+
+text {
+    element:cn.kkserver.view.document.TextElement;
+}
+
+img {
+    element:cn.kkserver.view.document.ImageElement;
+}
+
+scroll {
+    element:cn.kkserver.view.document.ViewElement;
+    view:cn.kkserver.view.ScrollView;
+}
+
+view {
+    element:cn.kkserver.view.document.ViewElement;
+    view:cn.kkserver.view.ElementView;
+}
+
+.item {
+    background-color: #ff0000;
+}
+
+.item:hover {
+    background-color: #dddddd;
+}
+
+.item text {
+    color: #fff;
+}
+
+.item text:hover {
+    color: #000;
+}
+

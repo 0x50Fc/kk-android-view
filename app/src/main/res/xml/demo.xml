@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<scroll layout="flow" width="100%" height="100%">
+    <scroll width="100%" height="300dp" reuse="top" layout="flow" nowarp="true" paging="true">
+        <view width="100%" height="100%" padding="10dp">
+            <canvas width="100%" height="100%" background-color="#00ff00"></canvas>
+        </view>
+        <view width="100%" height="100%" padding="10dp">
+            <canvas width="100%" height="100%" background-color="#ff0000"></canvas>
+        </view>
+        <view width="100%" height="100%" padding="10dp">
+            <canvas width="100%" height="100%" background-color="#00ff00"></canvas>
+        </view>
+        <view width="100%" height="100%" padding="10dp">
+            <canvas width="100%" height="100%" background-color="#0000ff"></canvas>
+        </view>
+    </scroll>
+    <view width="100%" height="300dp" margin="10dp" kk-each="items">
+        <canvas width="100%" height="100%" class="item" action="user">
+            <text font="14dp" text-align="center" height="auto" left="auto" right="auto" width="100%">1</text>
+            <img width="128dp" height="128dp" top="80dp" left="auto" right="auto" src="http://kkserver.cn/static/img/logo.png"></img>
+        </canvas>
+    </view>
+
+</scroll>
