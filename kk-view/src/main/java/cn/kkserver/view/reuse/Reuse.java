@@ -13,7 +13,7 @@ public class Reuse<T> implements IReuseGetter<T>,IReuseSetter<T>{
     private Queue<T> _queue = new LinkedList<T>();
 
     @Override
-    public T pull() {
+    public T poll() {
         return _queue.poll();
     }
 

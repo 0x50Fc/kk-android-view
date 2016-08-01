@@ -588,21 +588,24 @@ public class ScrollView extends ElementView {
 
                 String key = element.stringValue("reuse","");
 
-                ViewReuse reuse;
+                ViewReuse reuse = null;
 
-                if(_reuse.containsKey(key)) {
-                    reuse = _reuse.get(key);
-                }
-                else {
-                    reuse = new ViewReuse();
-                    _reuse.put(key,reuse);
-                }
+                if(key != null) {
+                    if (_reuse.containsKey(key)) {
+                        reuse = _reuse.get(key);
+                    } else {
+                        reuse = new ViewReuse();
+                        _reuse.put(key, reuse);
+                    }
 
-                ViewReuse.getter.push(reuse);
+                    ViewReuse.getter.push(reuse);
+                }
 
                 super.addViewElement(element);
 
-                ViewReuse.getter.pop();
+                if(reuse != null) {
+                    ViewReuse.getter.pop();
+                }
 
             }
 
@@ -619,21 +622,25 @@ public class ScrollView extends ElementView {
 
             String key = element.stringValue("reuse","");
 
-            ViewReuse reuse;
+            ViewReuse reuse = null;
 
-            if(_reuse.containsKey(key)) {
-                reuse = _reuse.get(key);
-            }
-            else {
-                reuse = new ViewReuse();
-                _reuse.put(key,reuse);
-            }
+            if(key != null) {
 
-            ViewReuse.setter.push(reuse);
+                if (_reuse.containsKey(key)) {
+                    reuse = _reuse.get(key);
+                } else {
+                    reuse = new ViewReuse();
+                    _reuse.put(key, reuse);
+                }
+
+                ViewReuse.setter.push(reuse);
+            }
 
             super.removeViewElement(element);
 
-            ViewReuse.setter.pop();
+            if(reuse != null) {
+                ViewReuse.setter.pop();
+            }
 
         }
         else {
@@ -746,7 +753,6 @@ public class ScrollView extends ElementView {
 
         return super.onElementEvent(event);
     }
-
 
     /**
      * 取消滚动事件

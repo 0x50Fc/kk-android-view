@@ -5,6 +5,6 @@ package cn.kkserver.view.reuse;
  */
 public interface IReuseGetter<T> {
 
-    public T pull() ;
+    public T poll() ;
 
 }

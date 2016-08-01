@@ -125,7 +125,9 @@ public class Style extends EventEmitter {
                 String[] vv = v.split(":");
                 String key = vv[0].trim();
                 String value = vv.length > 1 ? vv[1].trim() : "";
-                attributes.put(key, value);
+                if(! key.isEmpty()) {
+                    attributes.put(key, value);
+                }
             }
         }
 

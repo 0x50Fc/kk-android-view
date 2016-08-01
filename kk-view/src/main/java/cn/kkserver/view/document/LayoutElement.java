@@ -22,7 +22,7 @@ public class LayoutElement extends Element {
 
     public Rect frame() {
         if(_frame == null) {
-            _frame = new Rect(intValue("left",0),intValue("right",0),intValue("width",0),intValue("height",0));
+            _frame = new Rect(intValue("left",0),intValue("top",0),intValue("width",0),intValue("height",0));
         }
         return _frame;
     }
@@ -222,6 +222,18 @@ public class LayoutElement extends Element {
                 p = p.nextSibling();
             }
 
+        }
+
+        int v = intValue("min-content-height",insetSize.height,size.height);
+
+        if(size.height < v) {
+            size.height = v;
+        }
+
+        v = intValue("min-content-width",insetSize.width,size.width);
+
+        if(size.width < v) {
+            size.width = v;
         }
 
         setContentSize(size);

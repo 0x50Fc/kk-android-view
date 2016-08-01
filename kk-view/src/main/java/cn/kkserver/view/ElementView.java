@@ -30,6 +30,7 @@ import cn.kkserver.view.event.Event;
 import cn.kkserver.view.reuse.IReuseGetter;
 import cn.kkserver.view.reuse.IReuseSetter;
 import cn.kkserver.view.reuse.ViewReuse;
+import cn.kkserver.view.value.Color;
 import cn.kkserver.view.value.Rect;
 import cn.kkserver.view.value.Size;
 import cn.kkserver.view.value.Value;
@@ -134,7 +135,7 @@ public class ElementView extends ViewGroup implements IViewElement {
                     IReuseGetter<View> getter = ViewReuse.getter.peek();
                     if (getter != null) {
                         Class<?> viewClass = viewElement.viewClass();
-                        while (((v = getter.pull()) != null)) {
+                        while (((v = getter.poll()) != null)) {
                             if (v.getClass() == viewClass) {
                                 break;
                             } else if (v.getParent() != null) {
@@ -206,6 +207,9 @@ public class ElementView extends ViewGroup implements IViewElement {
     protected void onChangeElement(Element element) {
 
 
+        Color bgColor = element.colorValue("background-color", Color.clearColor);
+
+        setBackgroundColor(bgColor.intValue());
 
     }
 
@@ -255,12 +259,6 @@ public class ElementView extends ViewGroup implements IViewElement {
         init(attrs);
     }
 
-    private Size _layoutSize;
-
-    public Size layoutSize() {
-        return _layoutSize;
-    }
-
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
@@ -272,15 +270,7 @@ public class ElementView extends ViewGroup implements IViewElement {
             LayoutElement el = (LayoutElement) _element;
 
             if(! el.isLayouted() || _needsLayout) {
-                _layoutSize = new Size(width,height);
-                el.layout(_layoutSize);
-            }
-            else if(_layoutSize == null) {
-                _layoutSize = new Size(width,height);
-            }
-            else if(_layoutSize.width != width || _layoutSize.height != height) {
-                _layoutSize = new Size(width,height);
-                el.layout(_layoutSize);
+                el.layout(new Size(width,height));
             }
 
             Rect r = el.frame();
@@ -334,7 +324,9 @@ public class ElementView extends ViewGroup implements IViewElement {
             if(v != null) {
 
                 Rect frame = ((ViewElement) element).frame();
-                v.layout(left + frame.x, top + frame.y , left + frame.right(),top + frame.bottom());
+
+                v.layout(left + frame.x ,  top + frame.y , left + frame.right(), top + frame.bottom());
+
             }
 
         }
@@ -367,7 +359,7 @@ public class ElementView extends ViewGroup implements IViewElement {
             while(p != null) {
 
                 if(p instanceof LayoutElement) {
-                    onElementLayout(p,l , t);
+                    onElementLayout(p,0 , 0);
                 }
 
                 p = p.nextSibling();

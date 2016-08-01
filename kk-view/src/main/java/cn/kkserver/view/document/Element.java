@@ -426,7 +426,19 @@ public class Element extends EventDispatcher {
     public EventDispatcher dispatchEvent(Event event) {
 
         if(event instanceof ElementEmitEvent) {
+
             emit(event);
+
+            Element p = _lastChild;
+
+            while(p != null) {
+
+                dispatchChildrenEvent(p,event);
+
+                p = p.prevSibling();
+            }
+
+            return null;
         }
 
         if( event instanceof ElementRemovedEvent
@@ -545,19 +557,17 @@ public class Element extends EventDispatcher {
     }
 
     public String stringValue(String key, String defaultValue) {
+
         String v = attr(key);
-        String status = this.status();
 
-        Element el = this;
-
-        while(v == null && el != null) {
-            v = el.style().attrInStatus(key,status);
-            el = el.parentElement();
+        if(v == null) {
+            v = style().attrInStatus(key,this.status());
         }
 
         if(v == null) {
             return defaultValue;
         }
+
         return v;
     }
 
@@ -567,6 +577,14 @@ public class Element extends EventDispatcher {
 
     public int intValue(String key, int baseValue,int defaultValue) {
         return Value.intValue(stringValue(key,null),baseValue,defaultValue);
+    }
+
+    public float floatValue(String key, float defaultValue) {
+        return (float) Value.doubleValue(stringValue(key,null),defaultValue);
+    }
+
+    public double doubleValue(String key, double defaultValue) {
+        return Value.doubleValue(stringValue(key,null),defaultValue);
     }
 
     public Color colorValue(String key, Color defaultValue) {

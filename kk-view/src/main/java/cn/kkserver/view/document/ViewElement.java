@@ -9,7 +9,9 @@ import java.lang.reflect.Constructor;
 import cn.kkserver.view.ElementView;
 import cn.kkserver.view.event.Event;
 import cn.kkserver.view.event.EventDispatcher;
+import cn.kkserver.view.value.Loader;
 import cn.kkserver.view.value.Point;
+import cn.kkserver.view.value.Pool;
 import cn.kkserver.view.value.Rect;
 
 /**
@@ -57,7 +59,7 @@ public class ViewElement extends LayoutElement {
         }
         else {
             try {
-                return Class.forName(name);
+                return Loader.peek().loadClass(name);
             }
             catch(Throwable e) {
                 Log.d("kk-view",e.getMessage(),e);
@@ -80,7 +82,7 @@ public class ViewElement extends LayoutElement {
             }
             else {
                 try {
-                    Class<?> clazz = Class.forName(name);
+                    Class<?> clazz = Loader.peek().loadClass(name);
                     Constructor<?> constructor = clazz.getConstructor(Context.class);
                     v = (View) constructor.newInstance(context);
                 }
@@ -138,5 +140,6 @@ public class ViewElement extends LayoutElement {
             return super.dispatchEvent(event);
         }
     }
+
 }
 

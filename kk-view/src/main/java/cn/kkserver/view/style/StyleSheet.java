@@ -117,15 +117,19 @@ public class StyleSheet extends Style {
 
             StyleSheet ss = this;
 
-            for(String n : ns) {
+            String attr = "";
 
-                if(n.length() > 0){
-                    String[] nn = n.split(":");
-                    StyleSheet s = new StyleSheet(nn[0],nn.length > 1 ? nn[1] : "",attributes,true);
-                    ss.addStyle(s);
-                    ss = s;
+            for(int i=0;i<ns.length;i++) {
+                String n = ns[i];
+                String[] nn = n.split(":");
+
+                if(nn.length > 1) {
+                    attr = nn[1];
                 }
 
+                StyleSheet s = new StyleSheet(nn[0],attr,i == ns.length - 1 ? attributes : new TreeMap<String,String>(),true);
+                ss.addStyle(s);
+                ss = s;
             }
 
         }

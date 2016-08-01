@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import cn.kkserver.view.event.Event;
+import cn.kkserver.view.style.ComputedStyle;
 import cn.kkserver.view.value.Color;
 import cn.kkserver.view.value.Rect;
 import cn.kkserver.view.value.Unit;
@@ -34,7 +35,86 @@ public class CanvasElement extends TouchElement{
 	}
 	
 	protected void onDrawElement(Canvas canvas){
-		
+
+		Paint paint = new Paint();
+
+		Path path = new Path();
+
+		paint.setAntiAlias(true);
+
+		{
+			Color v = colorValue("color", Color.clearColor);
+			paint.setColor(v.intValue() & 0x0ffffff);
+			paint.setAlpha(v.a());
+		}
+
+		Rect frame  = frame();
+
+		Element p = firstChild();
+
+		while(p != null) {
+
+			if(p instanceof PaintElement) {
+
+				String name = p.name();
+
+				if("color".equals(name)) {
+					{
+						Color v = p.colorValue("value", Color.clearColor);
+						paint.setColor(v.intValue() & 0x0ffffff);
+						paint.setAlpha(v.a());
+					}
+				}
+				else if("move".equals(name)) {
+					path.moveTo((float) p.intValue("x",frame.width,0),(float) p.intValue("y",frame.height,0));
+				}
+				else if("line".equals(name)) {
+					path.lineTo((float) p.intValue("x",frame.width,0),(float) p.intValue("y",frame.height,0));
+				}
+				else if("arc".equals(name)) {
+					path.arcTo(
+							new RectF((float) p.intValue("left",frame.width,0)
+									,(float) p.intValue("top",frame.height,0)
+									,(float) p.intValue("right",frame.width,0)
+									,(float) p.intValue("bottom",frame.height,0))
+
+							,(float) (p.floatValue("start",0) * Math.PI / 180.0f)
+							,(float) (p.floatValue("end",0) * Math.PI / 180.0f)
+							,true);
+				}
+				else if("circle".equals(name)) {
+					path.addCircle((float) p.intValue("x",frame.width,0)
+							,(float) p.intValue("y",frame.height,0)
+							,(float) p.intValue("radius",frame.width,0), Path.Direction.CW);
+				}
+				else if("width".equals(name)) {
+					paint.setStrokeWidth(p.intValue("value",frame.width,0));
+				}
+				else if("draw".equals(name)) {
+
+					boolean fill = p.booleanValue("fill",false);
+					boolean stroke = p.booleanValue("stroke",false);
+
+					if(fill && stroke) {
+						paint.setStyle(Style.FILL_AND_STROKE);
+					}
+					else if(fill) {
+						paint.setStyle(Style.FILL);
+					}
+					else if(stroke) {
+						paint.setStyle(Style.STROKE);
+					}
+
+					canvas.drawPath(path,paint);
+
+					path = new Path();
+				}
+
+			}
+
+			p = p.nextSibling();
+		}
+
 	}
 	
 	public Color getBackgroundColor(){

@@ -38,16 +38,15 @@ public class TextElement extends CanvasElement {
 		
 		if(text != null && text.length() > 0){
 
-			float displayScale = Value.peek().displayScale;
 
-
+			Edge padding = padding();
 			Font font = this.font();
 	        Color textColor = this.textColor();
 			
 	        Paint paint = new Paint();
 	        
 	        paint.setAntiAlias(true);
-	        paint.setTextSize(font.size * displayScale);
+	        paint.setTextSize(font.size);
 	        paint.setFakeBoldText(font.bold);
 	        paint.setColor(textColor.intValue() & 0x0ffffff);
 	        paint.setAlpha(textColor.a());
@@ -68,7 +67,7 @@ public class TextElement extends CanvasElement {
 	        	h = maxHeight;
 	        }
 
-	        float dy = 0.0f;
+	        float dy = padding.top;
 	        
         	String align = stringValue("vertical-align","top");
     		
@@ -76,7 +75,7 @@ public class TextElement extends CanvasElement {
     			dy = ( height - h ) * 0.5f;
     		}
     		else if("bottom".equals(align)){
-    			dy = ( height - h ) ;
+    			dy = ( height - h ) - padding.bottom ;
     		}
     		
 			align = stringValue("text-align","left");
@@ -105,7 +104,7 @@ public class TextElement extends CanvasElement {
     			}
 
     		}
-    		else if("right".equals("align")){
+    		else if("right".equals(align)){
     			
     			{
     				
@@ -119,7 +118,7 @@ public class TextElement extends CanvasElement {
     					
     					len = paint.breakText(text, start, end, false, w, widths);
 
-    					canvas.drawText(text, start, start +  len, width - widths[0], dy - paint.ascent(), paint);
+    					canvas.drawText(text, start, start +  len, width - widths[0] - padding.right, dy - paint.ascent(), paint);
     					
     					dy +=  - paint.ascent() + paint.descent();
     					
@@ -142,7 +141,7 @@ public class TextElement extends CanvasElement {
     					
     					len = paint.breakText(text, start, end, false, w, widths);
 
-    					canvas.drawText(text, start, start +  len, 0.0f, dy - paint.ascent(), paint);
+    					canvas.drawText(text, start, start +  len, (float) padding.left, dy - paint.ascent(), paint);
     					
     					dy +=  - paint.ascent() + paint.descent();
     					
@@ -158,7 +157,8 @@ public class TextElement extends CanvasElement {
 	}
 	
 	public Size getTextSize(String text,Paint paint,float maxWidth){
-		
+
+
 		Size size = new Size(0,0);
 
 		float[] widths = new float[1];
@@ -194,13 +194,11 @@ public class TextElement extends CanvasElement {
 
 	        if(text != null && text.length() > 0){
 
-				float displayScale = Value.peek().displayScale;
-
 				Font font = this.font();
 	            
 	            Paint paint = new Paint();
 	            
-	            paint.setTextSize(font.size * displayScale);
+	            paint.setTextSize(font.size );
 	            paint.setFakeBoldText(font.bold);
 	      
 	            paint.breakText(text, 0, 0, false, 0, null);
@@ -211,8 +209,8 @@ public class TextElement extends CanvasElement {
 
 		        Size textSize = getTextSize(text,paint,maxWidth);
 	            
-		        float w = textSize.width ;
-		        float h = textSize.height;
+		        float w = textSize.width + padding.left + padding.right;
+		        float h = textSize.height + padding.top + padding.bottom;
 		        
 		        if(h > maxHeight){
 		        	h = maxHeight;

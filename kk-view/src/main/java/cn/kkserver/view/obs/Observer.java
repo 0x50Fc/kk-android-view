@@ -33,9 +33,11 @@ public class Observer extends ObsObject implements IObserver {
 
             obs = obs.keyObserver(key);
 
-            obs.change(this,keys);
-
             idx ++;
+
+            if (idx == keys.length) {
+                obs.change(this,keys);
+            }
         }
 
     }
